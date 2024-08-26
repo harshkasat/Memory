@@ -14,30 +14,19 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-import sentry_sdk
-sentry_sdk.init(
-    dsn="https://ed841dcd652fa3ab737c55eb4007a0cf@o4507694876655616.ingest.us.sentry.io/4507694879539200",
-    # Set traces_sample_rate to 1.0 to capture 100%
-    # of transactions for performance monitoring.
-    traces_sample_rate=1.0,
-    # Set profiles_sample_rate to 1.0 to profile 100%
-    # of sampled transactions.
-    # We recommend adjusting this value in production.
-    profiles_sample_rate=1.0,
-)
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-q1zbz3)@g-=5oa-t^#&zhf6f5=gvv$jwq^p_d@75n!das_zc26'
+SECRET_KEY = 'django-insecure-$t8is8@d!&qj9$c2xg=9pa$yvih4908vnl7528sie*6q4&l&r4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+AUTH_USER_MODEL = 'account.CustomUser'
 
 # Application definition
 
@@ -48,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'user',
     'rest_framework',
+    'account',
 ]
 
 MIDDLEWARE = [

@@ -16,13 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from user.router import router
-def trigger_error(request):
-    division_by_zero = 1 / 0
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user/', include(router.urls)),
-    path('user/', include('user.urls')),
-    path('sentry/', trigger_error),
+    path('user/', include('account.urls'))
 ]
