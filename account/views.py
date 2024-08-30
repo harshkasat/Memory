@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -9,6 +9,15 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 
 # Create your views here.
 class RegisterView(APIView):
+    def check_permissions(self, request):
+        if request.method == 'GET':
+            permission_classes = [IsAdminUser]
+            for permission in permission_classes:
+                if not permission().has_permission(request, self):
+                    self.permission_denied(
+                        request,
+                        message=getattr(permission, 'message', None)
+                    )
 
     def post(self, request):
         try:
@@ -28,7 +37,7 @@ class RegisterView(APIView):
             return Response({
                 'data': {},
                 'message': "User created successfully",
-                'user_id': serializer.data['uuid']  # Assuming the primary key is `uuid`
+                'user_id': serializer.data  # Assuming the primary key is `uuid`
             }, status=status.HTTP_201_CREATED)
 
         except Exception as e:
@@ -40,7 +49,7 @@ class RegisterView(APIView):
     def get(self, request):
         
         try:
-            
+            self.check_permissions(request)
             data = CustomUser.objects.all()
             serializer = RegisterSerializer(data, many=True)
 
@@ -70,12 +79,11 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
-    def post(self, request):
+    def get(self, request):
         logout(request)
         return Response({"message": "Successfully logged out."}, status=status.HTTP_200_OK)
 
 
-from rest_framework.permissions import IsAuthenticated
 class UserInfoView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [SessionAuthentication, BasicAuthentication]

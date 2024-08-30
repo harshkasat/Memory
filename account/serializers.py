@@ -18,7 +18,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True}
         }
-        exclude = ['created_at', 'updated_at', 'uuid']
+        exclude = ['created_at', 'updated_at', 'user_permissions', 'groups']
     
     def validate(self, attrs):
         email_regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
