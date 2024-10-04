@@ -5,7 +5,7 @@ from album.models import Album
 from rest_framework import viewsets, generics
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 
@@ -15,6 +15,7 @@ from rest_framework.permissions import IsAuthenticated
 
 class AlbumListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
     serializer_class = AlbumSerializer
 
     def get_queryset(self):
@@ -22,6 +23,7 @@ class AlbumListView(generics.ListAPIView):
 
 class AlbumCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
     serializer_class = AlbumSerializer
 
     def perform_create(self, serializer):
@@ -29,6 +31,7 @@ class AlbumCreateView(generics.CreateAPIView):
 
 class AlbumDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
     serializer_class = AlbumSerializer
 
     def get_queryset(self):

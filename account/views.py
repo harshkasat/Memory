@@ -5,7 +5,16 @@ from rest_framework.views import APIView
 from rest_framework import status
 from .models import CustomUser
 from .serializers import RegisterSerializer, LoginSerializer
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.views import TokenRefreshView
+
+
+
+
+class CustomTokenRefreshView(TokenRefreshView):
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
 
 # Create your views here.
 class RegisterView(APIView):
@@ -71,8 +80,18 @@ class LoginView(APIView):
             password = serializer.validated_data['password']
             user = authenticate(request, username=username, password=password)
             if user is not None:
-                login(request, user)
-                return Response({"message": "Logged in successfully"}, status=status.HTTP_200_OK)
+                # login(request, user)
+                # If the credentials are valid, create JWT tokens
+                refresh = RefreshToken.for_user(user)
+                access_token = str(refresh.access_token)
+                refresh_token = str(refresh)
+                
+                # Return the tokens to the client
+                return Response({
+                    "access_token": access_token,
+                    "refresh_token": refresh_token,
+                    "message": "Logged in successfully"
+                }, status=status.HTTP_200_OK)
             else:
                 return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -86,7 +105,7 @@ class LogoutView(APIView):
 
 class UserInfoView(APIView):
     permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [JWTAuthentication]
 
     def get(self, request):
         from django.middleware.csrf import get_token
