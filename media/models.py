@@ -35,7 +35,7 @@ class Media(models.Model):
     
     def __str__(self):
         return f'{self.album.title} in {self.media_type.capitalize()}'
-
+    
     class Meta:
         verbose_name = 'Media Item'
         verbose_name_plural = 'Media Items'
