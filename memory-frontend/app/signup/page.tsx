@@ -57,7 +57,7 @@ export default function Component() {
 
         if (response.ok) {
             // Registration successful
-            router.push('/'); // Redirect to home
+            router.push('/dasboard/'); // Redirect to home
         } else {
             const errorData = await response.json();
             console.error("Registration failed:", errorData); // Handle errors

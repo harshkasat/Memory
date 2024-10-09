@@ -37,7 +37,7 @@ export default function Component() {
       // Optional: You can store refresh_token if needed
       Cookies.set('refreshToken', data.refresh_token); // Store refresh token if needed
       // Login successful
-      router.push('/'); // Redirect to home
+      router.push('/dashboard'); // Redirect to home
     } else {
       // Handle login failure
       console.error("Login failed");
